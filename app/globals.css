@@ -22,7 +22,7 @@
   height: 100vh;
   width: 15%;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   background-color: blue;
   color: white;
 }
@@ -62,4 +62,18 @@
 .forms {
   display: flex;
   flex-direction: column;
+}
+
+.new-message-bar {
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  width: 85%;
+  background-color: orange;
+}
+
+@media (max-width: 767px) {
+  .new-message-bar {
+    width: 100%;
+  }
 }

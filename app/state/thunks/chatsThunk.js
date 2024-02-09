@@ -2,10 +2,12 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-export const getFavorites = (userId) => async () => {
+const server = "http://localhost:8080/api"
+
+export const getChatsByUser = (userId) => async () => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_SERVER}/favorites/${userId}/all-favorites`,
+      `${server}/chats/all-messages/${userId}/`,
       { withCredentials: true, credentials: 'include' }
     );
     return response;

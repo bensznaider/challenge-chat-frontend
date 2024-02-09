@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../state/thunks/usersThunk";
 import { setLoggedUser } from "../state/slices/userSlice";
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const loggedUser = useSelector((state) => state.loggedUser)
   const dispatch = useDispatch();
+  const router = useRouter()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -16,9 +18,10 @@ export default function Login() {
     const user = { name: username, password: password };
     try {
       const response = await dispatch(login(user));
-      dispatch(
+      await dispatch(
         setLoggedUser({ userId: response.data.userId, name: user.name })
       );
+      router.push('/')
     } catch (error) {
       console.error("Error during login: ", error);
       setErrorMessage("Incorrect name or password");

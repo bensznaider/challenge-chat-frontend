@@ -8,9 +8,12 @@ export default function Home() {
   return (
     <div className="pages">
       WELCOME
-      <Link href="/signup" color="blue.400" _hover={{ color: "blue.500" }}>
+      {!loggedUser.name ? ( <Link href="/signup" color="blue.400" _hover={{ color: "blue.500" }}>
         Get started
-      </Link>
+      </Link>) : ( <Link href="/chat" color="blue.400" _hover={{ color: "blue.500" }}>
+        Go to chats.
+      </Link>)}
+     
       <div>{loggedUser.name}</div>
     </div>
   );
