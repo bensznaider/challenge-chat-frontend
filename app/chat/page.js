@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HStack, Text, Textarea } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
+import ChatMessage from "../components/ChatMessage";
+import { newMessageAndAnswer } from "../state/thunks/chatsThunk";
 
 export default function Chat() {
+  const dispatch = useDispatch();
   const loggedUser = useSelector((state) => {
     return state.loggedUser;
   });
@@ -19,16 +22,18 @@ export default function Chat() {
 
   const handleSendMessage = () => {
     if (newMessage) {
-      console.log("OK EL ENVÍO DE MENSAJE:", newMessage);
+      setNewMessage("");
+      dispatch(newMessageAndAnswer(newMessage, loggedUser.userId));
     } else {
       console.log("NO HAY MENSAJE CAPO");
     }
   };
 
   return (
-    <div className="pages">
+    <div className="pages" style={{ paddingBottom: "22vh" }}>
       CHAT!!!!!
-      {chats && chats.map((chat) => <p key={chat.id}>{chat.message}</p>)}
+      {chats &&
+        chats.map((chat) => <ChatMessage key={chat.id} message={chat} />)}
       <div className="new-message-bar">
         <Text mb="8px">Message:</Text>
         <HStack>

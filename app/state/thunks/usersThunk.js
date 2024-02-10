@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setLoggedUser } from "../slices/userSlice.js";
-import { setChats } from "../slices/chatsSlice.js";
+import { getChatsByUser } from "./chatsThunk.js";
 
 axios.defaults.withCredentials = true;
 
@@ -26,11 +26,7 @@ export const login = (user) => async (dispatch) => {
     });
     localStorage.setItem("token", JSON.stringify(response.data));
     if (response.status === 200) {
-      const messages = await axios.get(
-        `${server}/chats/all-messages/${response.data.userId}/`,
-        { withCredentials: true, credentials: "include" }
-      );
-      dispatch(setChats(messages.data));
+      dispatch(getChatsByUser(response.data.userId));
     }
     return response;
   } catch (err) {
@@ -38,13 +34,16 @@ export const login = (user) => async (dispatch) => {
   }
 };
 
-export const reloadUser = () => async () => {
+export const reloadUser = () => async (dispatch) => {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const response = await axios.post(`${server}/users/me`, token, {
       withCredentials: true,
       credentials: "include",
     });
+    if (response.status === 200) {
+      dispatch(getChatsByUser(response.data.id));
+    }
     return response;
   } catch (err) {
     throw err;

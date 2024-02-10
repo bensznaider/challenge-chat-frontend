@@ -22,7 +22,7 @@
   height: 100vh;
   width: 15%;
   position: fixed;
-  z-index: 2;
+  z-index: 1;
   background-color: blue;
   color: white;
 }
@@ -67,8 +67,8 @@
 .new-message-bar {
   position: fixed;
   bottom: 0;
-  z-index: 1;
   width: 85%;
+  height: 22vh;
   background-color: orange;
 }
 
@@ -76,4 +76,12 @@
   .new-message-bar {
     width: 100%;
   }
+}
+
+.user-message {
+  background-color: aqua;
+}
+
+.bot-message {
+  background-color: green;
 }
