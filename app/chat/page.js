@@ -9,9 +9,9 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/react";
-import { ChatIcon } from "@chakra-ui/icons";
+import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
 import ChatMessage from "../components/ChatMessage";
-import { createChat, newMessageAndAnswer } from "../state/thunks/chatsThunk";
+import { createChat, newMessageAndAnswer, deleteChat } from "../state/thunks/chatsThunk";
 
 export default function Chat() {
   const dispatch = useDispatch();
@@ -32,12 +32,18 @@ export default function Chat() {
   const handleCreateChat = () => {
     if (newChat) {
       dispatch(createChat(newChat, loggedUser.userId));
-      setNewChat("")
+      setNewChat("");
+    }
+  };
+
+  const handleDeleteChat = () => {
+    if (selectedChat) {
+      dispatch(deleteChat(chats[selectedChat].id, loggedUser.userId))
     }
   };
 
   const handleSendMessage = () => {
-    if (newMessage) { 
+    if (newMessage) {
       dispatch(
         newMessageAndAnswer(
           newMessage,
@@ -67,6 +73,11 @@ export default function Chat() {
               </option>
             ))}
         </Select>
+        <DeleteIcon
+          onClick={handleDeleteChat}
+          color={selectedChat ? "white" : "grey"}
+          style={{ cursor: selectedChat ? "pointer" : "not-allowed" }}
+        />
         <VStack>
           <Text>New chat:</Text>
           <Input

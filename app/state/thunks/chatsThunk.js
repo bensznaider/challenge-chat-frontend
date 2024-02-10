@@ -55,13 +55,11 @@ export const createChat = (chatName, userId) => async (dispatch) => {
   }
 };
 
-//PENDING!!
-export const deleteChats = (movieData) => async () => {
-  const { tmdbId, userId } = movieData;
+export const deleteChat = (chatId, userId) => async () => {
   try {
     const response = await axios.delete(
-      `${import.meta.env.VITE_SERVER}/favorites/remove-favorite`,
-      { data: { userId: userId, tmdbId: tmdbId } },
+      `${server}/chats/delete-chat`,
+      { data: { id: chatId, userId: userId } },
       { withCredentials: true, credentials: "include" }
     );
     return response;
