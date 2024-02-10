@@ -33,26 +33,26 @@ export default function Bar() {
       <Link href="/" _hover={{ textDecoration: "none" }}>
         Challenge Chat
       </Link>
-      <div className="bar-buttons-wrapper">
-        {!loggedUser.userId ? (
-          <Stack>
-            {" "}
-            <Link
-              href="/signup"
-              className="buttons"
-              _hover={{ textDecoration: "none" }}
-            >
-              Signup
-            </Link>
-            <Link
-              href="/login"
-              className="buttons"
-              _hover={{ textDecoration: "none" }}
-            >
-              Login
-            </Link>
-          </Stack>
-        ) : (
+      <Stack direction={{ base: "row", md: "column" }}>
+        {!loggedUser.userId && (
+          <Link
+            href="/signup"
+            className="buttons"
+            _hover={{ textDecoration: "none" }}
+          >
+            Signup
+          </Link>
+        )}
+        {!loggedUser.userId && (
+          <Link
+            href="/login"
+            className="buttons"
+            _hover={{ textDecoration: "none" }}
+          >
+            Login
+          </Link>
+        )}
+        {loggedUser.userId && (
           <Button
             className="buttons"
             _hover={{ textDecoration: "none" }}
@@ -61,9 +61,8 @@ export default function Bar() {
             Logout
           </Button>
         )}
-
-        <div>{loggedUser.name}</div>
-      </div>
+        {loggedUser.userId && <div>{loggedUser.name}</div>}
+      </Stack>
     </div>
   );
 }

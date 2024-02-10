@@ -1,10 +1,17 @@
 "use client";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HStack, Text, Textarea } from "@chakra-ui/react";
+import {
+  HStack,
+  VStack,
+  Input,
+  Text,
+  Textarea,
+  Select,
+} from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import ChatMessage from "../components/ChatMessage";
-import { newMessageAndAnswer } from "../state/thunks/chatsThunk";
+import { createChat, newMessageAndAnswer } from "../state/thunks/chatsThunk";
 
 export default function Chat() {
   const dispatch = useDispatch();
@@ -15,25 +22,69 @@ export default function Chat() {
     return state.chats;
   });
   const [newMessage, setNewMessage] = useState("");
+  const [selectedChat, setSelectedChat] = useState(undefined);
+  const [newChat, setNewChat] = useState("");
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
   };
 
+  const handleCreateChat = () => {
+    if (newChat) {
+      dispatch(createChat(newChat, loggedUser.userId));
+      setNewChat("")
+    }
+  };
+
   const handleSendMessage = () => {
-    if (newMessage) {
+    if (newMessage) { 
+      dispatch(
+        newMessageAndAnswer(
+          newMessage,
+          loggedUser.userId,
+          chats[selectedChat].id
+        )
+      );
       setNewMessage("");
-      dispatch(newMessageAndAnswer(newMessage, loggedUser.userId));
-    } else {
-      console.log("NO HAY MENSAJE CAPO");
     }
   };
 
   return (
-    <div className="pages" style={{ paddingBottom: "22vh" }}>
-      CHAT!!!!!
+    <div
+      className="pages"
+      style={{ paddingTop: "1rem", paddingBottom: "22vh" }}
+    >
+      <HStack>
+        <Select
+          placeholder="Select chat"
+          value={selectedChat}
+          onChange={(event) => setSelectedChat(event.target.value)}
+        >
+          {chats &&
+            chats.map((chat, index) => (
+              <option key={chat.id} value={index}>
+                {chat.name}
+              </option>
+            ))}
+        </Select>
+        <VStack>
+          <Text>New chat:</Text>
+          <Input
+            type="name"
+            placeholder="Chat name/description."
+            value={newChat}
+            onChange={(event) => setNewChat(event.target.value)}
+          />
+          <div className="buttons" onClick={handleCreateChat}>
+            Create
+          </div>
+        </VStack>
+      </HStack>
       {chats &&
-        chats.map((chat) => <ChatMessage key={chat.id} message={chat} />)}
+        selectedChat &&
+        chats[selectedChat].messages.map((message) => (
+          <ChatMessage key={message.id} message={message} />
+        ))}
       <div className="new-message-bar">
         <Text mb="8px">Message:</Text>
         <HStack>
