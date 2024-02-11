@@ -74,7 +74,7 @@ export default function Chat() {
               w="80%"
               mr="0.5rem"
               style={{
-                cursor: chats.length === 0 ? "not-allowed" : "pointer",
+                cursor: chats.length === 0 && "not-allowed",
               }}
             />
             <ChatIcon

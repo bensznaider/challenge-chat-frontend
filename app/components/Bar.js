@@ -43,7 +43,7 @@ export default function Bar({ chats, setSelectedChat, selectedChat }) {
   };
 
   const handleDeleteChat = () => {
-    if (selectedChat) {
+    if (selectedChat !== undefined) {
       dispatch(deleteChat(chats[selectedChat].id, loggedUser.userId));
     }
   };
