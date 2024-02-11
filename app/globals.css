@@ -71,6 +71,7 @@ body {
 .new-message-bar {
   position: fixed;
   bottom: 0;
+  right: 0;
   width: 85%;
   height: 22vh;
   background: linear-gradient(to right, black, #003300);

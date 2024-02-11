@@ -3,7 +3,7 @@ import { Providers } from "./providers";
 import { Provider } from "react-redux";
 import store from "./state/store.js";
 import "./globals.css";
-import Bar from "./components/Bar";
+import { BrowserRouter } from "react-router-dom";
 import { Inter } from "next/font/google";
 
 const inter = Inter({
@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Provider store={store}>
           <Providers>
-            {children}
+            <BrowserRouter>{children}</BrowserRouter>
           </Providers>
         </Provider>
       </body>

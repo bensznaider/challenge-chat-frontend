@@ -44,7 +44,9 @@ export default function Home() {
 
   useEffect(() => {
     if (loggedUser.userId) {
-      router.push("/chat");
+      setTimeout(() => {
+        router.push("/chat");
+      }, 3000);
     }
   }, [loggedUser, router]);
 

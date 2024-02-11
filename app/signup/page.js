@@ -3,7 +3,7 @@ import { Stack, Input, Button, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../state/thunks/usersThunk";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export default function Signup() {
   const loggedUser = useSelector((state) => state.loggedUser);
@@ -26,8 +26,9 @@ export default function Signup() {
         setPassword("");
         setTimeout(() => {
           setCorrectSignUp(null);
-          navigate.push("/");
-        }, 2000);
+          navigate("/");
+          location.reload();
+        }, 3000);
       }
     } catch (error) {
       console.error("Error during signup: ", error);
