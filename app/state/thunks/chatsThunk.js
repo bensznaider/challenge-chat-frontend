@@ -3,8 +3,7 @@ import { setChats } from "../slices/chatsSlice";
 
 axios.defaults.withCredentials = true;
 
-const server = "http://localhost:8080/api";
-//const server = "https://challenge-chat-backend.onrender.com/api"
+const server = "https://challenge-chat-backend.onrender.com/api"
 
 export const getChatsByUser = (userId) => async (dispatch) => {
   try {

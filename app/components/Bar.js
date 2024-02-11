@@ -35,16 +35,26 @@ export default function Bar({ chats, setSelectedChat, selectedChat }) {
     userPersistence();
   }, []);
 
-  const handleCreateChat = () => {
+  const handleCreateChat = async () => {
     if (newChat) {
-      dispatch(createChat(newChat, loggedUser.userId));
-      setNewChat("");
+      try {
+        await dispatch(createChat(newChat, loggedUser.userId));
+        setNewChat("");
+        location.reload();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-  const handleDeleteChat = () => {
+  const handleDeleteChat = async (chatId) => {
     if (selectedChat !== undefined) {
-      dispatch(deleteChat(chats[selectedChat].id, loggedUser.userId));
+      try {
+        await dispatch(deleteChat(chatId, loggedUser.userId));
+        location.reload();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -109,7 +119,7 @@ export default function Bar({ chats, setSelectedChat, selectedChat }) {
                 {chat.name}
               </Text>
               <DeleteIcon
-                onClick={handleDeleteChat}
+                onClick={() => handleDeleteChat(chat.id)}
                 color={selectedChat !== undefined ? "white" : "grey"}
                 style={{
                   cursor:
@@ -166,7 +176,7 @@ export default function Bar({ chats, setSelectedChat, selectedChat }) {
               ))}
           </Select>
           <DeleteIcon
-            onClick={handleDeleteChat}
+            onClick={() => handleDeleteChat(chats[selectedChat].id)}
             color={selectedChat ? "white" : "grey"}
             style={{ cursor: selectedChat ? "pointer" : "not-allowed" }}
           />
