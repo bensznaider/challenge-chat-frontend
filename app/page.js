@@ -5,12 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { login } from "./state/thunks/usersThunk";
 import { setLoggedUser } from "./state/slices/userSlice";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
   const loggedUser = useSelector((state) => state.loggedUser);
   const dispatch = useDispatch();
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -45,15 +43,15 @@ export default function Home() {
   useEffect(() => {
     if (loggedUser.userId) {
       setTimeout(() => {
-        router.push("/chat");
+        location.replace("/chat")
       }, 3000);
     }
-  }, [loggedUser, router]);
+  }, [loggedUser]);
 
   return (
     <div
       className="pages"
-      style={{ background: "linear-gradient(to left, black, #001500)" }}
+      style={{ background: "linear-gradient(to left, black, #001500)", paddingLeft: 0 }}
     >
       {!loggedUser.userId ? (
         <VStack align="center" justify="center">

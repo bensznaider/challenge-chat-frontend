@@ -1,9 +1,12 @@
 "use client";
+import { Text } from "@chakra-ui/react";
 
 export default function ChatMessage({ message }) {
   return (
-    <div className={message.isMessageFromUser ? "user-message" : "bot-message"}>
+    <Text
+      className={`messages ${message.isMessageFromUser ? "user-message" : "bot-message"}`}
+    >
       {message.message}
-    </div>
+    </Text>
   );
 }

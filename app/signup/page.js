@@ -24,7 +24,7 @@ export default function Signup() {
         setPassword("");
         setTimeout(() => {
           setCorrectSignUp(null);
-          location.replace("/")
+          location.replace("/");
         }, 3000);
       }
     } catch (error) {
@@ -49,7 +49,10 @@ export default function Signup() {
   return (
     <div
       className="pages"
-      style={{ background: "linear-gradient(to left, black, #001500)" }}
+      style={{
+        background: "linear-gradient(to left, black, #001500)",
+        paddingLeft: 0,
+      }}
     >
       {!loggedUser.userId ? (
         <div>

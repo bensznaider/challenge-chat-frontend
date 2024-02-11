@@ -9,13 +9,9 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/react";
-import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
+import { ChatIcon } from "@chakra-ui/icons";
 import ChatMessage from "../components/ChatMessage";
-import {
-  createChat,
-  newMessageAndAnswer,
-  deleteChat,
-} from "../state/thunks/chatsThunk";
+import { newMessageAndAnswer } from "../state/thunks/chatsThunk";
 import Bar from "../components/Bar";
 
 export default function Chat() {
@@ -27,24 +23,10 @@ export default function Chat() {
     return state.chats;
   });
   const [newMessage, setNewMessage] = useState("");
-  const [selectedChat, setSelectedChat] = useState(undefined);
-  const [newChat, setNewChat] = useState("");
+  const [selectedChat, setSelectedChat] = useState(0);
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
-  };
-
-  const handleCreateChat = () => {
-    if (newChat) {
-      dispatch(createChat(newChat, loggedUser.userId));
-      setNewChat("");
-    }
-  };
-
-  const handleDeleteChat = () => {
-    if (selectedChat) {
-      dispatch(deleteChat(chats[selectedChat].id, loggedUser.userId));
-    }
   };
 
   const handleSendMessage = () => {
@@ -62,58 +44,38 @@ export default function Chat() {
 
   return (
     <div>
-      <Bar />
+      <Bar
+        setSelectedChat={setSelectedChat}
+        chats={chats}
+        selectedChat={selectedChat}
+      />
       <div
         className="pages"
         style={{ paddingTop: "1rem", paddingBottom: "22vh" }}
       >
-        <HStack>
-          <Select
-            placeholder="Select chat"
-            value={selectedChat}
-            onChange={(event) => setSelectedChat(event.target.value)}
-          >
-            {chats &&
-              chats.map((chat, index) => (
-                <option key={chat.id} value={index}>
-                  {chat.name}
-                </option>
-              ))}
-          </Select>
-          <DeleteIcon
-            onClick={handleDeleteChat}
-            color={selectedChat ? "white" : "grey"}
-            style={{ cursor: selectedChat ? "pointer" : "not-allowed" }}
-          />
-          <VStack>
-            <Text>New chat:</Text>
-            <Input
-              type="name"
-              placeholder="Chat name/description."
-              value={newChat}
-              onChange={(event) => setNewChat(event.target.value)}
-            />
-            <div className="buttons" onClick={handleCreateChat}>
-              Create
-            </div>
-          </VStack>
-        </HStack>
+        {chats.length === 0 && (
+          <Text fontSize={["lg", "2xl"]} textAlign="center">
+            Create a new chat to get started.
+          </Text>
+        )}
         {chats &&
-          selectedChat &&
+          chats[selectedChat] !== undefined &&
           chats[selectedChat].messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
         <div className="new-message-bar">
           <Text mb="8px">Message:</Text>
-          <HStack>
+          <HStack justify="center">
             <Textarea
               value={newMessage}
               onChange={handleInputChange}
               placeholder="Type your message here"
               resize="none"
-              w="72%"
-              ml="10%"
-              mr="10%"
+              w="80%"
+              mr="0.5rem"
+              style={{
+                cursor: chats.length === 0 ? "not-allowed" : "pointer",
+              }}
             />
             <ChatIcon
               onClick={handleSendMessage}
