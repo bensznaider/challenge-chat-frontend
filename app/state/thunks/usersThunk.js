@@ -4,7 +4,7 @@ import { getChatsByUser } from "./chatsThunk.js";
 
 axios.defaults.withCredentials = true;
 
-const server = "http://localhost:8080/api";
+const server = "https://challenge-chat-backend.onrender.com/api"
 
 export const createUser = (user) => async () => {
   try {

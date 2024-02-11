@@ -108,7 +108,7 @@ export default function Chat() {
             ml="10%"
             mr="10%"
           />
-          <ChatIcon onClick={handleSendMessage} />
+          <ChatIcon onClick={handleSendMessage} style={{cursor: "pointer"}}/>
         </HStack>
       </div>
     </div>
