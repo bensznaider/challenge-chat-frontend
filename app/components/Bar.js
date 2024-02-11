@@ -7,6 +7,7 @@ import { setLoggedUser } from "../state/slices/userSlice";
 import { Button, Text, Select, Input, HStack, VStack } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { extendTheme } from "@chakra-ui/react";
+import { deleteChat } from "../state/thunks/chatsThunk";
 
 const breakpoints = {
   base: "0px",
