@@ -16,6 +16,7 @@ import {
   newMessageAndAnswer,
   deleteChat,
 } from "../state/thunks/chatsThunk";
+import Bar from "../components/Bar";
 
 export default function Chat() {
   const dispatch = useDispatch();
