@@ -3,12 +3,12 @@ import { Stack, Input, Button, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../state/thunks/usersThunk";
-import { useRouter } from "next/router";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const loggedUser = useSelector((state) => state.loggedUser);
   const dispatch = useDispatch();
-  const router = useRouter()
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [correctSignUp, setCorrectSignUp] = useState(null);
@@ -26,7 +26,7 @@ export default function Signup() {
         setPassword("");
         setTimeout(() => {
           setCorrectSignUp(null);
-          router.push("/");
+          navigate.push("/");
         }, 2000);
       }
     } catch (error) {
