@@ -1,18 +1,20 @@
 "use client";
-import { Stack, Input, Button } from "@chakra-ui/react";
+import { Stack, Input, Button, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../state/thunks/usersThunk";
+import { useRouter } from "next/router";
 
 export default function Signup() {
   const loggedUser = useSelector((state) => state.loggedUser);
   const dispatch = useDispatch();
+  const router = useRouter()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [correctSignUp, setCorrectSignUp] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const handleSignUpRequest = async (event) => {
+  const handleSignUpRequest = async () => {
     setErrorMessage(null);
     setCorrectSignUp(null);
     const user = { name: username, password: password };
@@ -24,6 +26,7 @@ export default function Signup() {
         setPassword("");
         setTimeout(() => {
           setCorrectSignUp(null);
+          router.push("/");
         }, 2000);
       }
     } catch (error) {
@@ -31,11 +34,7 @@ export default function Signup() {
       setErrorMessage(error.response.data);
       setTimeout(() => {
         setErrorMessage(null);
-      }, 3000);
-      document.getElementById("result-message").scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+      }, 2000);
     }
   };
 
@@ -50,17 +49,25 @@ export default function Signup() {
   };
 
   return (
-    <div>
+    <div
+      className="pages"
+      style={{ background: "linear-gradient(to left, black, #001500)" }}
+    >
       {!loggedUser.userId ? (
-        <div className="pages">
-          WELCOME TO SIGN UP PAGE, WHERE YOU CAN SIGN UP TO THIS SHITTY CHAT
-          THAT IS DRIVING ME CRAZY BECAUSE I HAVE NEVER USED NEXT AND MY
-          ECONOMIC FUTURE RELIES ON IT
+        <div>
+          <Text fontSize="2xl" textAlign="center">
+            Sign up on Challenge Chat
+          </Text>
+          <Text fontSize="sm" mt="0.5rem" mb="1.5rem" textAlign="center">
+            Enter your user name and password.
+          </Text>
           <Stack
             className="forms"
             style={{
               margin: "auto",
+              width: "15rem",
             }}
+            align="center"
           >
             <Input
               className=""
@@ -80,11 +87,11 @@ export default function Signup() {
                 marginBottom: "1.5rem",
               }}
             />
-            <Button onClick={handleSignUpRequest}>SIGN UP</Button>
+            <Button onClick={handleSignUpRequest}>Sign up</Button>
           </Stack>
           {correctSignUp && (
             <div style={{ margin: "1rem", fontSize: "large" }}>
-              User succesfully created, please log in.
+              User succesfully created, you will be redirected to the homepage.
             </div>
           )}
           {errorMessage && (
@@ -94,7 +101,10 @@ export default function Signup() {
           )}
         </div>
       ) : (
-        <h1 className="pages">YA ESTÁS LOGUEADO MOSTRO</h1>
+        <Text fontSize="4xl">
+          You are already logged in as {loggedUser.name}. We will redirect you
+          to your chats.
+        </Text>
       )}
     </div>
   );

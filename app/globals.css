@@ -8,9 +8,15 @@
   text-decoration: none;
 }
 
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
 .pages {
-  padding-left: 15%;
-  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
   background-color: black;
   color: white;
@@ -23,7 +29,6 @@
   height: 100vh;
   width: 15%;
   position: fixed;
-  z-index: 1;
   background: linear-gradient(to left, black, #001500);
   color: white;
 }
@@ -31,14 +36,11 @@
 @media (max-width: 767px) {
   .pages {
     padding-left: 0;
-    padding-top: 3rem;
   }
 
   .bar {
     height: 3rem;
     width: 100vw;
-    flex-direction: row;
-    justify-content: space-between;
   }
 }
 

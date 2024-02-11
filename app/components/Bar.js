@@ -43,15 +43,6 @@ export default function Bar() {
             Signup
           </Link>
         )}
-        {!loggedUser.userId && (
-          <Link
-            href="/login"
-            className="buttons"
-            _hover={{ textDecoration: "none" }}
-          >
-            Login
-          </Link>
-        )}
         {loggedUser.userId && (
           <Button
             className="buttons"
