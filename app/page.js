@@ -73,7 +73,7 @@ export default function Home() {
     <div
       className="pages"
       style={{
-        background: "linear-gradient(to left, black, #001500)",
+        background: "linear-gradient(to left, black, #002600)",
         paddingLeft: 0,
       }}
     >
