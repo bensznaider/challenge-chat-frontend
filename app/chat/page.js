@@ -103,26 +103,28 @@ export default function Chat() {
             </div>
           )}
         </div>
-        <div className="new-message-bar">
-          <Text mb="8px">Message:</Text>
-          <HStack justify="center">
-            <Textarea
-              value={newMessage}
-              onChange={handleInputChange}
-              placeholder="Type your message here"
-              resize="none"
-              w="80%"
-              mr="0.5rem"
-              style={{
-                cursor: chats.length === 0 && "not-allowed",
-              }}
-            />
-            <ChatIcon
-              onClick={handleSendMessage}
-              style={{ cursor: "pointer" }}
-            />
-          </HStack>
-        </div>
+        {chats.length > 0 && (
+          <div className="new-message-bar">
+            <Text mb="8px">Message:</Text>
+            <HStack justify="center">
+              <Textarea
+                value={newMessage}
+                onChange={handleInputChange}
+                placeholder="Type your message here"
+                resize="none"
+                w="80%"
+                mr="0.5rem"
+                style={{
+                  cursor: chats.length === 0 && "not-allowed",
+                }}
+              />
+              <ChatIcon
+                onClick={handleSendMessage}
+                style={{ cursor: "pointer" }}
+              />
+            </HStack>
+          </div>
+        )}
       </div>
     </div>
   );

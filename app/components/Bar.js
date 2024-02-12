@@ -44,7 +44,7 @@ export default function Bar({ chats, setSelectedChat, selectedChat }) {
   };
 
   const handleDeleteChat = async (chatId) => {
-    if (selectedChat !== undefined) {
+    if (selectedChat !== undefined && chats.length > 0) {
       try {
         setSpinnerDeleteChatOn(true);
         await dispatch(deleteChat(chatId, loggedUser.userId));
