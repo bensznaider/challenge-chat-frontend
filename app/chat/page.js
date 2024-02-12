@@ -1,17 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  HStack,
-  VStack,
-  Input,
-  Text,
-  Textarea,
-  Select,
-} from "@chakra-ui/react";
+import { HStack, Text, Textarea } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import ChatMessage from "../components/ChatMessage";
-import { newMessageAndAnswer } from "../state/thunks/chatsThunk";
+import {
+  getChatsByUser,
+  newMessageAndAnswer,
+} from "../state/thunks/chatsThunk";
 import Bar from "../components/Bar";
 
 export default function Chat() {
@@ -23,22 +19,38 @@ export default function Chat() {
     return state.chats;
   });
   const [newMessage, setNewMessage] = useState("");
+  const [temporaryMessageDisplayed, setTemporaryMessageDisplayed] =
+    useState(null);
   const [selectedChat, setSelectedChat] = useState(0);
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage) {
-      dispatch(
-        newMessageAndAnswer(
-          newMessage,
-          loggedUser.userId,
-          chats[selectedChat].id
-        )
-      );
-      setNewMessage("");
+      try {
+        await setTemporaryMessageDisplayed({
+          isMessageFromUser: true,
+          message: newMessage,
+        });
+        document.body.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        setNewMessage("");
+        const response = await dispatch(
+          newMessageAndAnswer(
+            newMessage,
+            loggedUser.userId,
+            chats[selectedChat].id
+          )
+        );
+        if (response.status === 201) {
+          await dispatch(getChatsByUser(loggedUser.userId));
+          setTemporaryMessageDisplayed(null);
+        }
+        document.body.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -63,6 +75,11 @@ export default function Chat() {
           chats[selectedChat].messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
+        <div id="temporary-message">
+          {temporaryMessageDisplayed && (
+            <ChatMessage message={temporaryMessageDisplayed} />
+          )}
+        </div>
         <div className="new-message-bar">
           <Text mb="8px">Message:</Text>
           <HStack justify="center">

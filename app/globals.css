@@ -85,7 +85,7 @@ body {
   right: 0;
   width: 75vw;
   padding-bottom: 1rem;
-  background: linear-gradient(to right, black, #003300);
+  background-color: black;
 }
 
 @media (max-width: 550px) {

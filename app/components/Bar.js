@@ -6,15 +6,8 @@ import { createChat } from "../state/thunks/chatsThunk";
 import { setLoggedUser } from "../state/slices/userSlice";
 import { Button, Text, Select, Input, HStack, VStack } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { extendTheme } from "@chakra-ui/react";
 import { deleteChat } from "../state/thunks/chatsThunk";
 
-const breakpoints = {
-  base: "0px",
-  md: "550px",
-};
-
-const theme = extendTheme({ breakpoints });
 
 export default function Bar({ chats, setSelectedChat, selectedChat }) {
   const loggedUser = useSelector((state) => state.loggedUser);

@@ -71,7 +71,7 @@ export default function Home() {
         <VStack align="center" justify="center">
           <Text fontSize="4xl">Welcome back</Text>
           <Text fontSize="3xl">
-            You are already logged in as {loggedUser.name}. We will redirect you
+            You are logged in as {loggedUser.name}. We will redirect you
             to your chats.
           </Text>
         </VStack>
