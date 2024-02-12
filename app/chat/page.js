@@ -44,7 +44,7 @@ export default function Chat() {
   };
 
   const handleSendMessage = async () => {
-    if (newMessage) {
+    if (newMessage && chats.length > 0) {
       try {
         await setTemporaryMessageDisplayed({
           isMessageFromUser: true,
