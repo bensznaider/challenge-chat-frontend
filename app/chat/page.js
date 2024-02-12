@@ -1,13 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HStack, Text, Textarea } from "@chakra-ui/react";
+import { HStack, Text, Textarea, Spinner } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import ChatMessage from "../components/ChatMessage";
 import {
   getChatsByUser,
   newMessageAndAnswer,
 } from "../state/thunks/chatsThunk";
+import { reloadUser } from "../state/thunks/usersThunk";
+import { setLoggedUser } from "../state/slices/userSlice";
 import Bar from "../components/Bar";
 
 export default function Chat() {
@@ -23,6 +25,20 @@ export default function Chat() {
     useState(null);
   const [selectedChat, setSelectedChat] = useState(0);
 
+  useEffect(() => {
+    const userPersistence = async () => {
+      try {
+        const response = await dispatch(reloadUser());
+        dispatch(
+          setLoggedUser({ userId: response.data.id, name: response.data.name })
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    userPersistence();
+  }, []);
+
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
   };
@@ -34,7 +50,7 @@ export default function Chat() {
           isMessageFromUser: true,
           message: newMessage,
         });
-        document.body.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        document.body.scrollIntoView({ behavior: "smooth", block: "end" });
         setNewMessage("");
         const response = await dispatch(
           newMessageAndAnswer(
@@ -47,7 +63,7 @@ export default function Chat() {
           await dispatch(getChatsByUser(loggedUser.userId));
           setTemporaryMessageDisplayed(null);
         }
-        document.body.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        document.body.scrollIntoView({ behavior: "smooth", block: "end" });
       } catch (error) {
         console.log(error);
       }
@@ -63,7 +79,11 @@ export default function Chat() {
       />
       <div
         className="pages"
-        style={{ paddingTop: "1rem", paddingBottom: "22vh" }}
+        style={{
+          paddingTop: "1rem",
+          paddingBottom: "22vh",
+          justifyContent: "start",
+        }}
       >
         {chats.length === 0 && (
           <Text fontSize={["lg", "2xl"]} textAlign="center">
@@ -77,7 +97,10 @@ export default function Chat() {
           ))}
         <div id="temporary-message">
           {temporaryMessageDisplayed && (
-            <ChatMessage message={temporaryMessageDisplayed} />
+            <div>
+              <ChatMessage message={temporaryMessageDisplayed} />
+              <Spinner marginLeft="50%" marginRight="50%" />
+            </div>
           )}
         </div>
         <div className="new-message-bar">

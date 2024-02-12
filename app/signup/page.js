@@ -1,8 +1,10 @@
 "use client";
 import { Stack, Input, Button, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser } from "../state/thunks/usersThunk";
+import { createUser, reloadUser } from "../state/thunks/usersThunk";
+import { Spinner } from "@chakra-ui/react";
+import { setLoggedUser } from "../state/slices/userSlice";
 
 export default function Signup() {
   const loggedUser = useSelector((state) => state.loggedUser);
@@ -11,28 +13,56 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [correctSignUp, setCorrectSignUp] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [spinnerOn, setSpinnerOn] = useState(false);
+
+  useEffect(() => {
+    const userPersistence = async () => {
+      try {
+        const response = await dispatch(reloadUser());
+        dispatch(
+          setLoggedUser({ userId: response.data.id, name: response.data.name })
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    userPersistence();
+  }, []);
+
+  useEffect(() => {
+    if (loggedUser.userId) {
+      setTimeout(() => {
+        location.replace("/chat");
+      }, 3000);
+    }
+  }, [loggedUser]);
 
   const handleSignUpRequest = async () => {
     setErrorMessage(null);
     setCorrectSignUp(null);
     const user = { name: username, password: password };
-    try {
-      const response = await dispatch(createUser(user));
-      if (response.status === 200) {
-        setCorrectSignUp(true);
-        setUsername("");
-        setPassword("");
+    if (user.name && user.password) {
+      try {
+        setSpinnerOn(true);
+        const response = await dispatch(createUser(user));
+        if (response.status === 200) {
+          setCorrectSignUp(true);
+          setUsername("");
+          setPassword("");
+          setTimeout(() => {
+            setCorrectSignUp(null);
+            setSpinnerOn(false);
+            location.replace("/");
+          }, 3000);
+        }
+      } catch (error) {
+        console.error("Error during signup: ", error);
+        setErrorMessage(error.response.data);
+        setSpinnerOn(false);
         setTimeout(() => {
-          setCorrectSignUp(null);
-          location.replace("/");
-        }, 3000);
+          setErrorMessage(null);
+        }, 2000);
       }
-    } catch (error) {
-      console.error("Error during signup: ", error);
-      setErrorMessage(error.response.data);
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 2000);
     }
   };
 
@@ -88,23 +118,37 @@ export default function Signup() {
                 marginBottom: "1.5rem",
               }}
             />
-            <Button onClick={handleSignUpRequest}>Sign up</Button>
+            {!spinnerOn ? (
+              <Button onClick={handleSignUpRequest}>Sign up</Button>
+            ) : (
+              <Spinner />
+            )}
           </Stack>
           {correctSignUp && (
-            <div style={{ margin: "1rem", fontSize: "large" }}>
+            <div
+              style={{ margin: "1rem", fontSize: "large", textAlign: "center" }}
+            >
               User succesfully created, you will be redirected to the homepage.
             </div>
           )}
           {errorMessage && (
-            <div style={{ margin: "1rem", fontSize: "large" }}>
+            <div
+              style={{
+                margin: "1rem",
+                marginRight: "10%",
+                marginLeft: "10%",
+                fontSize: "large",
+                textAlign: "center",
+              }}
+            >
               {errorMessage}
             </div>
           )}
         </div>
       ) : (
-        <Text fontSize="4xl">
-          You are already logged in as {loggedUser.name}. We will redirect you
-          to your chats.
+        <Text fontSize="4xl" textAlign="center">
+          You are logged in as {loggedUser.name}. We will redirect you to your
+          chats.
         </Text>
       )}
     </div>
