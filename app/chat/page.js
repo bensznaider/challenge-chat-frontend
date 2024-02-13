@@ -103,7 +103,7 @@ export default function Chat() {
             </div>
           )}
         </div>
-        {chats.length > 0 && (
+        {chats.length > 0 && selectedChat !== "" && (
           <div className="new-message-bar">
             <Text mb="8px">Message:</Text>
             <HStack justify="center">
